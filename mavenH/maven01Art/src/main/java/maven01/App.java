@@ -13,30 +13,45 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 public class App extends JFrame{
-	public App() throws IOException {
-		super();
+	public App() throws HeadlessException {
+		new Thread(this).start();
+		
+	}
+
+	@Override
+	public void run() {
+
 		JPanel jpanel = new JPanel();
-		
-	
-		BufferedReader inn = new BufferedReader(new FileReader("homeWork04.txt"));
-		if(inn!=null) {
-		String line;
-		while ((line = inn.readLine()) != null) {
-			JLabel labele = new JLabel(line);
-			jpanel.add(labele);
-			break;
+
+		try {
+			BufferedReader inn = new BufferedReader(new FileReader("homeWork04.txt"));
+			if (inn != null) {
+				String line;
+				while ((line = inn.readLine()) != null) {
+					JLabel labele = new JLabel(line);
+					jpanel.add(labele);
+					break;
+				}
+			}
+		} catch (Exception e) {
+
 		}
+		BufferedReader in = new BufferedReader(
+				new InputStreamReader(getClass().getResourceAsStream("/homeWork041.txt")));
+		if (in != null) {
+			String line2;
+			try {
+				while ((line2 = in.readLine()) != null) {
+					JLabel labele2 = new JLabel(line2);
+					jpanel.add(labele2);
+					break;
+				}
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
 		}
-		BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/homeWork041.txt")));
-		if(in!=null) {
-		String line2;
-		while ((line2 = in.readLine()) != null) {
-			JLabel labele2 = new JLabel(line2);
-			jpanel.add(labele2);
-			break;
-		}
-		}
-		
+
 		URL url = this.getClass().getResource("/game.jpg");
 		JLabel jlabelImage02 = new JLabel(new ImageIcon(url));
 		File image = new File("pudge.jpg");
@@ -50,7 +65,9 @@ public class App extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 	}
-    public static void main( String[] args )throws IOException {
-        new App();
-    }
+
+	public static void main(String[] args) throws IOException {
+		new App();
+		System.out.println("Кол-во потоков: " + Thread.activeCount());
+	}
 }
